@@ -85,7 +85,7 @@
                 <label for="email" class="">{{ __('Email') }}</label>
 
                 <div class="">
-                    <input id="email" type="text" class="form-control shadow-sm p-2 mb-1 bg-white rounded @error('email') is-invalid @enderror" name="email" value="{{ $email ?? old('email') }}" required autocomplete="email" autofocus placeholder="Enter email"> 
+                    <input id="email" type="text" class="form-control shadow-sm p-2 mb-1 bg-white rounded @error('email') is-invalid @enderror" name="email" value="{{ $email ?? old('email') }}" required autocomplete="email" autofocus placeholder="Enter email" readonly> 
 
                     @error('email')
                         <span class="invalid-feedback" role="alert">

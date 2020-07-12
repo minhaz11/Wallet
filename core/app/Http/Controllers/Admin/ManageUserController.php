@@ -110,4 +110,19 @@ class ManageUserController extends Controller
         }
         
     }
+
+    public function search(Request $request)
+
+    {
+        $this->validate($request,[
+            'search'=>'required'
+        ]);
+       
+       $user= User::where('username', $request->search)->first();
+      
+        if($user == null){
+            return back()->with('error','User name does not exist');
+        }
+        return view('admin.searchResult',compact('user'));
+    }
 }

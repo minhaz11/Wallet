@@ -56,6 +56,7 @@ Route::group(['prefix'=>'admin', 'namespace'=>'Admin', 'as'=>'admin.'], function
     Route::get('all/referral/logs', 'ManageUserController@referralLog')->name('all.referral');
     Route::get('user/referral/logs/{id}', 'ManageUserController@userReferralLog')->name('user.referral');
     Route::post('user/login','ManageUserController@userLogin')->name('userLogin');
+    Route::post('user/search','ManageUserController@search')->name('user.search');
     
    
 });
@@ -87,15 +88,17 @@ Route::group(['prefix'=>'user',  'as'=>'user.'], function(){
         return view('user.updatePassword');
     })->name('edit.password');
     Route::post('update/password','HomeController@updatePassword')->name('update.password');
+    Route::get('transaction/logs','HomeController@trxLogs')->name('trx.logs');
 
     
 });
 
 //---------transaction--------//
 Route::post('transfered','TransactionController@transaction')->name('transaction');
-Route::post('admin/add/balance/user', 'TransactionController@balanceOperation')->name('add.balance');
+Route::post('admin/add/balance/user', 'Admin\DashboardController@balanceOperation')->name('add.balance');
 Route::get('admin/all/transactions', 'TransactionController@allTransaction')->name('all.transaction');
 Route::get('admin/user/transactions/{id}', 'TransactionController@userTransaction')->name('user.transaction');
+Route::post('admin/transactions/search', 'TransactionController@search')->name('admin.trx.search');
 
 
 

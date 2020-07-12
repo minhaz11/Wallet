@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\GeneralSetting;
 use App\Referral_bonus;
 use App\User;
-use App\User_info;
 use App\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -31,13 +30,20 @@ class HomeController extends Controller
     public function index()
     {
         $user = Auth::user();
-        $trxs = $user->transactions()->paginate(15);
-        return view('user.home', compact('trxs'));
+        $trxs = Transaction::where('user_id',$user->id)->with('user')->paginate(15);
+        $logs = User::with('referrer')->where('referrer_id',$user->id)->get('referrer_id');
+        $bonuses = Referral_bonus::where('user_id',$user->id)->get('amount');
+        return view('user.home', compact('trxs','logs','bonuses'));
+    }
+ public function trxLogs()
+    {
+        $user = Auth::user();
+        $trxs = Transaction::where('user_id',$user->id)->with('user')->paginate(15);
+        return view('user.transactionLog',compact('trxs'));
     }
     public function showProfile()
     {
         
-       
         return view('user.profile');
     }
     public function updateProfile(Request $request)
@@ -46,7 +52,7 @@ class HomeController extends Controller
             'name'=>'required',
             'address' => 'required',
             'phone'=>'required',
-            'username'=>'required'
+            'username'=>'required|unique:users'
         ]);
         $user = User::find(Auth::user()->id);
         $user->name = $request->name;
@@ -61,7 +67,7 @@ class HomeController extends Controller
     public function referralLog()
     {
         $user = Auth::user();
-        $logs = User::where('referrer_id',$user->id)->with('referrer')->paginate(10);
+        $logs = User::with('referrer')->where('referrer_id',$user->id)->paginate(10);
         return view('user.referralLog',compact('logs'));
     }
 
@@ -96,6 +102,10 @@ class HomeController extends Controller
 
     public function sendReferral(Request $request)
     {
+        $this->validate($request,[
+            'email' => 'required|email'
+        ]);
+       
         $sitename = GeneralSetting::first();
         $sender = Auth::user();
 

@@ -175,7 +175,7 @@
                                     <div class="card text-center mb-3 border border rounded" style="width: 25rem;">
                                         <div class="card-body">
                                           <h5 class="card-title text-info">Total Money Transaction</h5>
-                                        <h1 class="text-primary font-weight-bold">{{$totalTrx->sum('amount')}} BDT</h1>
+                                        <h1 class="text-primary font-weight-bold">{{number_format($totalTrx->sum('amount'))}} BDT</h1>
                                           {{-- <a href="#" class="btn btn-primary">Go somewhere</a> --}}
                                         </div>
                                       </div>

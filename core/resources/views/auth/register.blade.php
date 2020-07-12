@@ -130,7 +130,12 @@
       <div class="card-body">
 
         <div class="container w-50">
- 
+           
+            @if(Session::has('referrer'))
+            <div class="form-group ">
+                <label class="">{{ __('Referrence by') }} :  <span class="text-primary">{{ session()->get('referrer')}}</span></label>
+            </div>
+            @endif
           <form method="POST" action="{{ route('register') }}">
             @csrf
             

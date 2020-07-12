@@ -3,10 +3,11 @@
 namespace App\Http\Controllers\Admin;
 
 use App\User;
+use App\Transaction;
 use App\GeneralSetting;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Transaction;
 
 class DashboardController extends Controller
 {
@@ -32,11 +33,11 @@ class DashboardController extends Controller
     {
         $this->validate($request,[
             'sitename'=>'required',
-            'fixed' => 'required|min:10|numeric',
-            'percentage'=>'required|min:10|numeric',
+            'fixed' => 'required|min:0|numeric',
+            'percentage'=>'required|min:0|numeric',
             'refJoinBonus'=>'required|min:10|numeric',
-            'interest'=>'required|min:10|numeric',
-            'nrmJoinBonus'=>'required|min:10|numeric',
+            'interest'=>'required|min:5|numeric',
+            'nrmJoinBonus'=>'required|min:5|numeric',
             'trxBonus'=>'required|min:1|numeric',
             'regBonus'=>'required|min:1|numeric',
             
@@ -69,4 +70,45 @@ class DashboardController extends Controller
         }
         return back()->with('success','Interest added to user balance');
     }
+
+    
+    //admin adding balance to user
+    public function balanceOperation(Request $request)
+    {
+        $this->validate($request, [
+            'username' => 'required',
+            'amount' => 'required|min:10|numeric'
+        ]);
+
+        $user = User::where('username', $request->username)->first();
+
+        if(!$user){
+            return back()->with('error','User does not exist');
+        }
+
+        if ($request->op == 'add') {
+            $user->Balance += $request->amount;
+            $message = 'Balance added to' . ' ' . $user->username;
+        } else {
+            if ($request->amount > $user->Balance) {
+                return back()->with("error", "Insuffiecient balance!!!");
+            } else {
+                $user->Balance -= $request->amount;
+                $message = 'Balance subtract from' . ' ' . $user->username;
+            }
+        }
+        
+        Transaction::create([
+            'user_id' => $user->id,
+            'trx_number' => Str::random(12),
+            'amount' => $request->amount,
+            'trx_type' => $request->op == 'add' ? '+' . $request->amount : '-' . $request->amount,
+            'post_balance' => $user->Balance,
+            'details' => 'Recieved from Admin',
+            'charge' => 0
+        ]);
+        $user->save();
+        return back()->with('success', $message);
+    }
+    
 }

@@ -41,7 +41,7 @@
                     </div>
                     <div class="form-group">
                       <label for="exampleInputPassword1">Username</label>
-                      <input type="text" name="username" class="form-control @error('username') is-invalid @enderror" id="exampleInputPassword1" placeholder="Username" value="{{Auth::user()->username ?? old('username')}}">
+                      <input type="text" name="username" class="form-control @error('username') is-invalid @enderror" id="exampleInputPassword1" placeholder="Username" value="{{Auth::user()->username ?? old('username')}}" readonly>
                       @error('username')
                       <span class="invalid-feedback" role="alert">
                            <strong>{{ $message }}</strong>

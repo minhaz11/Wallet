@@ -14,7 +14,7 @@
                 </div>
             </div>
             <div class="row mt-4 tm-edit-product-row">
-                <div class="col-md-12" style="width: 100rem">
+                <div class="col-md-12" style="width: 90rem">
                 <form action="{{route('admin.user.update',['id'=>$user->id])}}" method="POST" class="tm-edit-product-form">
                         @csrf
                         <div class="input-group mb-3">

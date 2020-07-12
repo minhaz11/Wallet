@@ -65,7 +65,7 @@ Dashboard - admin
             <div class="input-group mb-3">
                 {{-- <label for="name" class="col-xl-4 col-lg-4 col-md-4 col-sm-5 col-form-label">Set Join Bonus
                 </label> --}}
-                <input id="interest" placeholder="Set the amount" name="interest" type="number" class="form-control validate col-xl-9 col-lg-8 col-md-8 col-sm-7 @error('interest') is-invalid @enderror">
+            <input id="interest" placeholder="Set the amount" name="interest" type="number" class="form-control validate col-xl-9 col-lg-8 col-md-8 col-sm-7 @error('interest') is-invalid @enderror" value="{{$settings->interest}}" readonly>
                 @error('interest')
                 <span class="invalid-feedback" role="alert">
                     <strong>{{ $message }}</strong>
@@ -85,7 +85,7 @@ Dashboard - admin
       
            <strong class="text-primary">Site name: </strong><span>{{$settings->site_name}}</span><br>
            <strong class="text-primary">Interest: </strong><span>{{$settings->interest}}%</span><br>
-           <strong class="text-primary">Join Bonus: </strong><span>{{$settings->join_bonus}}</span>(BDT)<br>
+           <strong class="text-primary">Join Bonus: </strong><span>{{$settings->ref_join_bonus}}</span>(BDT)<br>
            <strong class="text-primary">Fixed Charge: </strong><span>{{$settings->fixed_charge}}(BDT)</span><br>
            <strong class="text-primary">Percentage Charge: </strong><span>{{$settings->percentage_charge}}%</span>
            

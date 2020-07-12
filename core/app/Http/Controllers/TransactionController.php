@@ -17,7 +17,6 @@ class TransactionController extends Controller
         return $this->middleware('auth:web,admin');
     }
 
-
     //tarnsaction operation
     public function transaction(Request $request)
     {
@@ -30,31 +29,34 @@ class TransactionController extends Controller
         $sender = Auth::user(); //sender 
         $receiver = User::where('username', $request->username)->first(); //receiver
 
-        if (!$receiver) {
-            return back();
+        if (!$receiver || $receiver->username == $sender->username) {
+            return back()->with('error','Invalid Username');
+
         }
-        if ($receiver->username) {
+
             $charge = $request->amount * ($setting->percentage_cahrge / 100) + $setting->fixed_charge;
             $totalAmount = $request->amount + $charge;
-            if ($totalAmount <= $sender->Balance) {
+
+            if($totalAmount > $sender->Balance){
+                return back()->with('error','In sufficient balance');
+            }
+            
                 $trx_number = Str::random(12);
 
                 //adding balance to reciever
-                $reciever_post_balance  =  $receiver->Balance + $request->amount;
+                $receiver->Balance += $request->amount;
+                $receiver->save();
                 //creating transaction for reciever
                 Transaction::create([
                     'user_id' => $receiver->id,
                     'trx_number' => $trx_number,
                     'amount' => $request->amount,
                     'trx_type' => $request->amount,
-                    'post_balance' => $reciever_post_balance,
+                    'post_balance' => $receiver->Balance + $request->amount,
                     'details' => 'Recieved from' . ' ' . $sender->name,
                     'charge' => $charge
                 ]);
-
-                $receiver->Balance += $request->amount;
-                $receiver->save();
-
+                
 
                 $sender_post_balance =  $sender->Balance - $totalAmount;
                 //creating transaction for sender
@@ -84,47 +86,10 @@ class TransactionController extends Controller
                         'details'=>'From'.' '.$sender->name.' '.'for transaction'
                     ]);
                 }
-            }
-        }
 
         return back()->with('success', 'Balance Transfered');
     }
 
-    //admin adding balance to user
-    public function balanceOperation(Request $request)
-    {
-        $this->validate($request, [
-            'username' => 'required',
-            'amount' => 'required|min:10|numeric'
-        ]);
-
-        $user = User::where('username', $request->username)->first();
-
-        if ($request->op == 'add') {
-            $user->Balance += $request->amount;
-            $message = 'Balance added to' . ' ' . $user->username;
-        } else {
-            if ($request->amount > $user->Balance) {
-                return back()->with("error", "Insuffiecient balance!!!");
-            } else {
-                $user->Balance -= $request->amount;
-                $message = 'Balance subtract from' . ' ' . $user->username;
-            }
-        }
-
-
-        Transaction::create([
-            'user_id' => $user->id,
-            'trx_number' => Str::random(12),
-            'amount' => $request->amount,
-            'trx_type' => $request->op == 'add' ? '+' . $request->amount : '-' . $request->amount,
-            'post_balance' => $user->Balance,
-            'details' => 'Recieved from Admin',
-            'charge' => 0
-        ]);
-        $user->save();
-        return back()->with('success', $message);
-    }
 
     //All transaction Logs
     public function allTransaction()
@@ -139,5 +104,20 @@ class TransactionController extends Controller
     {
         $transactions = Transaction::where('user_id', $id)->with('user')->paginate(10);
         return view('admin.userTransaction', compact('transactions'));
+    }
+
+    //search
+    public function search(Request $request)
+
+    {
+        $this->validate($request,[
+            'search'=>'required'
+        ]);
+       
+        $trxs= Transaction::where('trx_number', $request->search)->get();
+        if($trxs->isEmpty()){
+            return back()->with('error','Transaction does not exist');
+        }
+        return view('admin.trxSearchResult',compact('trxs'));
     }
 }

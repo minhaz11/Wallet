@@ -1,7 +1,7 @@
 @extends('layouts.admin.master')
 
 @section('title')
-    Manage users
+   Searched user
 @endsection
 
 @section('content')
@@ -10,21 +10,13 @@
         <div class="bg-white tm-block h-100">
             <div class="row">
                 <div class="col-md-8 col-sm-12">
-                    <h2 class="tm-block-title d-inline-block text-primary">Users <span class="ml-5 text-danger">Total Users: {{$totalUser->count()}}</span></h2>
-                    {{-- <form action="" method="POST">
-                        <input type="text" class="form-control " value="">
-                        <button type="submit" class="btn btn-primary">Search</button>
-                    </form> --}}
-                <form class="form-inline my-2 my-lg-0" method="POST" action="{{route('admin.user.search')}}">
-                    @csrf
-                        <input class="form-control mr-sm-2 mt-4" type="text" placeholder="Search By Username" aria-label="Search" name="search">
-                        <button class="btn btn-outline-success my-2 my-sm-0 " type="submit">Search</button>
-                </form>
+                    <h2 class="tm-block-title d-inline-block text-primary">User <span class="ml-5 text-danger"></span></h2>
+                    
 
                 </div>
-                <div class="col-md-4 col-sm-12 text-right">
+                {{-- <div class="col-md-4 col-sm-12 text-right">
                 <a href="{{route('admin.user.deleted')}}" class="btn btn-small btn-primary">Trashed Users</a>
-                </div>
+                </div> --}}
             </div>
             <div class="table-responsive " style="width: 90rem">
                 <table class="table table-hover table-striped tm-table-striped-even mt-3">
@@ -43,9 +35,9 @@
                     </thead>
                     <tbody>
                         {{-- @dd($users) --}}
-                        @foreach ($users as $key => $user)
+                        {{-- @foreach ($user as $key => $item) --}}
                         <tr>
-                        <td>{{$users->firstItem()+$key}}</td>
+                        <td>1</td>
                         <td class="tm-product-name">{{$user->name}}</td>
                         <td class="text-center">{{$user->username}}</td>
                         <td class="text-center">{{$user->email}}</td>
@@ -65,7 +57,7 @@
                             </div>
                             </td>
                         </tr>
-                        @endforeach
+                       
                        
                         
                     </tbody>
@@ -81,7 +73,7 @@
                     <span class="tm-pagination-label"></span>
                     <nav aria-label="Page navigation" class="d-inline-block">
                         <ul class="pagination tm-pagination">
-                            {{$users->links()}}
+                            {{-- {{$user->links()}} --}}
                             
                         </ul>
                     </nav>

@@ -2,8 +2,11 @@
 
 namespace App\Providers;
 
-use App\Transaction;
 use App\User;
+use App\Transaction;
+use App\GeneralSetting;
+use Facade\FlareClient\View;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -25,10 +28,17 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        view()->composer('*', function ($view) {
-            $view->with('totalUser', User::all());
-            $view->with('totalTrx', Transaction::all());
-        });
+
+        view()->composer('admin.allTransactionLog',  function ($view){
+            $view->with('totalTrx', Transaction::get('amount'));
+        } );
+        view()->composer('admin.manage_users',  function ($view){
+            $view->with('totalUser', User::get('id'));
+        } );
+        // view()->composer('layouts.user',  function ($view){
+        //     $view->with('ref_by', User::get(Auth::user()->id)->referrer());
+        // } );
+
     }
-    
+
 }

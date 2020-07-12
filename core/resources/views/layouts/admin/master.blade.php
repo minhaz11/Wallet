@@ -135,7 +135,7 @@
   
     <script>
         let ctxLine,
-            ctxBar,
+            ctxBar, 
             ctxPie,
             optionsLine,
             optionsBar,

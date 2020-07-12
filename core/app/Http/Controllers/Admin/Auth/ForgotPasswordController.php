@@ -44,7 +44,7 @@ class ForgotPasswordController extends Controller
             $this->credentials($request)
         );
 
-        Session::flash('success','Password Reset Link Sent');
+        Session::flash('success','Password Reset  Link Sent');
         return $response == Password::RESET_LINK_SENT
                     ? $this->sendResetLinkResponse($request, $response)
                     : $this->sendResetLinkFailedResponse($request, $response);

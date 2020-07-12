@@ -16,10 +16,9 @@
                 <label>Your referral link</label>
               <input type="text" name="link" class="form-control text-primary mb-3"  value="{{ Auth::user()->referral_link }}" readonly>
               <label for="exampleInputEmail1">Email Address</label>
-              <input type="email" name="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="email address">
+              <input type="text" name="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="email address">
             
             </div>
-            
            
             <button type="submit" class="btn btn-primary">Send</button>
           </form>
