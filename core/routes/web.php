@@ -56,7 +56,7 @@ Route::group(['prefix'=>'admin', 'namespace'=>'Admin', 'as'=>'admin.'], function
     Route::get('all/referral/logs', 'ManageUserController@referralLog')->name('all.referral');
     Route::get('user/referral/logs/{id}', 'ManageUserController@userReferralLog')->name('user.referral');
     Route::post('user/login','ManageUserController@userLogin')->name('userLogin');
-    Route::post('user/search','ManageUserController@search')->name('user.search');
+    Route::get('user/search','ManageUserController@search')->name('user.search');
     
    
 });
@@ -98,7 +98,7 @@ Route::post('transfered','TransactionController@transaction')->name('transaction
 Route::post('admin/add/balance/user', 'Admin\DashboardController@balanceOperation')->name('add.balance');
 Route::get('admin/all/transactions', 'TransactionController@allTransaction')->name('all.transaction');
 Route::get('admin/user/transactions/{id}', 'TransactionController@userTransaction')->name('user.transaction');
-Route::post('admin/transactions/search', 'TransactionController@search')->name('admin.trx.search');
+Route::get('admin/transactions/search', 'TransactionController@search')->name('admin.trx.search');
 
 
 

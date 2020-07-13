@@ -19,6 +19,7 @@
     <link rel="stylesheet" href="{{asset('assets/admin/css/bootstrap.min.css')}}">
     <!-- https://getbootstrap.com/ -->
     <link rel="stylesheet" href="{{asset('assets/admin/css/tooplate.css')}}">
+    <script src="https://use.fontawesome.com/523c3912de.js"></script>
 </head>
 
 <body id="reportsPage">

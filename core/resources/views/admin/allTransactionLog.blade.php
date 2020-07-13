@@ -11,7 +11,7 @@
             <div class="row">
                 <div class="col-md-8 col-sm-12">
                 <h2 class="tm-block-title d-inline-block">All Transaction Logs  <span class="ml-5 text-danger">Total Transactions: {{$totalTrx->count()}}</span></h2>
-                <form class="form-inline my-2 my-lg-0" method="POST" action="{{route('admin.trx.search')}}">
+                <form class="form-inline my-2 my-lg-0" method="GET" action="{{route('admin.trx.search')}}">
                     @csrf
                         <input class="form-control mr-sm-2 mt-4" type="text" placeholder="Search By Trx no." aria-label="Search" name="search">
                         <button class="btn btn-outline-success my-2 my-sm-0 " type="submit">Search</button>

@@ -51,14 +51,23 @@ class HomeController extends Controller
         $this->validate($request,[
             'name'=>'required',
             'address' => 'required',
-            'phone'=>'required',
-            'username'=>'required|unique:users'
+           
+            'img'=>'image|mimes:jpeg,png,jpg,gif|max:2048',
+           
         ]);
         $user = User::find(Auth::user()->id);
         $user->name = $request->name;
         $user->address = $request->address;
-        $user->phone = $request->phone;
-        $user->username = $request->username;
+       
+        if($request->file('img')){
+            $name = time().'.'.$request->img->extension();
+            $path = 'assets/img';
+            if($user->photo !== null){
+                unlink( $path.'/'.$user->photo);
+            }
+            $request->img->move($path,$name);
+            $user->photo =  $name;
+        }
         $user->save();
 
          return back()->with('success','Profile Updated');

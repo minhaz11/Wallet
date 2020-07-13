@@ -10,7 +10,7 @@
               Profile Info
             </div>
             <div class="card-body">
-            <form action="{{route('user.profile.update')}}" method="POST">
+            <form action="{{route('user.profile.update')}}" method="POST" enctype="multipart/form-data">
                    @csrf
               <div class="form-group">
                       <label for="exampleInputEmail1">Name</label> 
@@ -31,26 +31,16 @@
                      @enderror
                     </div>
                     <div class="form-group">
-                      <label for="exampleInputEmail1">Phone</label> 
-                      <input type="text" name="phone" class="form-control @error('phone') is-invalid @enderror" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Phone" value="{{Auth::user()->phone ?? old('phone')}}">
-                      @error('phone')
+                      <label for="exampleInputEmail1">Choose Image</label>
+                      <input type="file" name="img" class="form-control-file @error('img') is-invalid @enderror" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Address" value="{{Auth::user()->address ?? old('img')}}">
+                      @error('img')
                       <span class="invalid-feedback" role="alert">
                            <strong>{{ $message }}</strong>
                       </span>
                      @enderror
                     </div>
-                    <div class="form-group">
-                      <label for="exampleInputPassword1">Username</label>
-                      <input type="text" name="username" class="form-control @error('username') is-invalid @enderror" id="exampleInputPassword1" placeholder="Username" value="{{Auth::user()->username ?? old('username')}}" readonly>
-                      @error('username')
-                      <span class="invalid-feedback" role="alert">
-                           <strong>{{ $message }}</strong>
-                      </span>
-                     @enderror
-                    </div>
-                   
                     <button type="submit" class="btn btn-primary">Update</button>
-                  </form>
+                 </form>
            
             </div>
             <div class="card-footer text-muted">

@@ -63,10 +63,11 @@
     <div class="container-fluid">
        <div class="row">
         <div class="col-md-3 border rounded mt-3 shadow p-3 mb-5 bg-white rounded">
-                <img class=" ml-5 mt-2 w-75 h-30" src="{{asset('assets/user/img/user.png')}}" alt="Card image cap">
+        <img class=" ml-5 mt-2 w-75 h-30" src="{{asset('assets/img')}}/{{Auth::user()->photo}}" alt="Card image cap">
                  <li class="list-group-item mt-2 text-center shadow p-3 mb-5 bg-white rounded "><strong>{{Auth::user()->name}}</strong></li>
+                @if(Auth::user()->referrer)
                  <span class="list-group-item text-muted  text-center"><strong>Referenced by : {{Auth::user()->referrer->username}}</strong></span>
-                 
+                 @endif
             
                 
             <ul class="list-group mt-3 mb-5 font-weight-bold">

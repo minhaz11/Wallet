@@ -5,7 +5,7 @@
  
 @section('content')
 <div class="card bg-light mb-3 mt-3 shadow p-3 mb-5 bg-white rounded" style="max-width: 90rem;">
-<div class="card-header text-uppercase font-weight-bold">Transaction Log   <span class="ml-5">Total Transaction: {{$trxs->count()}}</span></div> 
+<div class="card-header text-uppercase font-weight-bold">Transaction Log   <span class="ml-5">Total Transaction: {{$totalTrx->count('id')}}</span></div> 
     <div class="card-body">
       <!-- <h5 class="card-title">Light card title</h5>
       <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p> -->

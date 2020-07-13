@@ -29,8 +29,8 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
 
-        view()->composer('admin.allTransactionLog',  function ($view){
-            $view->with('totalTrx', Transaction::get('amount'));
+        view()->composer(['admin.allTransactionLog','user.transactionLog'],  function ($view){
+            $view->with('totalTrx', Transaction::get('amount','id'));
         } );
         view()->composer('admin.manage_users',  function ($view){
             $view->with('totalUser', User::get('id'));

@@ -47,14 +47,14 @@ class RegisterController extends Controller
     }
 
     public function showRegistrationForm(Request $request)
-        {
-            if ($request->has('ref')) {
-                $ref = session(['referrer' => $request->query('ref')]);
-            }
-            // $referrer = User::whereUsername(session()->pull('referrer'))->first();
-
-            return view('auth.register');
+    {
+        if ($request->has('ref')) {
+            $ref = session(['referrer' => $request->query('ref')]);
         }
+
+
+        return view('auth.register');
+    }
 
     /**
      * Get a validator for an incoming registration request.
@@ -66,7 +66,7 @@ class RegisterController extends Controller
     {
         return Validator::make($data, [
             'name' => ['required', 'string', 'max:255'],
-            'username' => ['required', 'string', 'max:255','unique:users'],
+            'username' => ['required', 'string', 'max:255', 'unique:users'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
             'phone' => ['required', 'string', 'max:255'],
@@ -82,16 +82,16 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-     
+
 
         $referrer = User::whereUsername(session()->pull('referrer'))->first();
         // dd($referrer);
-       
+
         $setting = GeneralSetting::first();
         //Referrer bonus adding
-        if($referrer){
-            $referredBy = User::where('id',$referrer->id)->first();
-            $referredBy->Balance = $referredBy->Balance+$setting->ref_reg_bonus;
+        if ($referrer) {
+            $referredBy = User::where('id', $referrer->id)->first();
+            $referredBy->Balance = $referredBy->Balance + $setting->ref_reg_bonus;
             $referredBy->save();
 
             //referrer.....
@@ -99,28 +99,30 @@ class RegisterController extends Controller
                 'user_id' => $referredBy->id,
                 'trx_number' => Str::random(12),
                 'amount' => $setting->ref_reg_bonus,
-                'trx_type' =>'+'.$setting->ref_reg_bonus,
+                'trx_type' => '+' . $setting->ref_reg_bonus,
                 'post_balance' => $referredBy->Balance,
-                'details' => 'From'.' '.$data['name'].' '.'for sign up',
+                'details' => 'From' . ' ' . $data['name'] . ' ' . 'for sign up',
                 'charge' => 0
             ]);
-            
+
             Referral_bonus::create([
-                'user_id'=>$referredBy->id,
-                'amount'=> $setting->ref_reg_bonus,
-                'details'=>'From'.' '.$data['name'].' '.'for sign up'
+                'user_id' => $referredBy->id,
+                'amount' => $setting->ref_reg_bonus,
+                'details' => 'From' . ' ' . $data['name'] . ' ' . 'for sign up'
             ]);
         }
 
-       $user = User::create([
+
+        //create user
+        $user = User::create([
             'name' => $data['name'],
             'username' => $data['username'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
             'referrer_id' => $referrer ? $referrer->id : null,
-            'Balance' =>$referrer ? $setting->ref_join_bonus:$setting->nrm_join_bonus,
-            'phone'=>$data['phone'],
-            'address'=>$data['address']
+            'Balance' => $referrer ? $setting->ref_join_bonus : $setting->nrm_join_bonus,
+            'phone' => $data['phone'],
+            'address' => $data['address']
         ]);
 
         //signup bonus transaction with or without referral
@@ -128,22 +130,16 @@ class RegisterController extends Controller
             'user_id' => $user->id,
             'trx_number' => Str::random(12),
             'amount' => $user->Balance,
-            'trx_type' =>'+'.$user->Balance,
-            'post_balance' =>$user->Balance,
-            'details' => $referrer ?'For referral sign up bonus':'For sign up bonus',
+            'trx_type' => '+' . $user->Balance,
+            'post_balance' => $user->Balance,
+            'details' => $referrer ? 'For referral sign up bonus' : 'For sign up bonus',
             'charge' => 0
         ]);
-        
-            return $user;
-        
 
+        return $user;
     }
 
     protected function registered(Request $request, $user)
     {
-        
-        
     }
-
-    
 }

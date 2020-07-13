@@ -15,7 +15,7 @@
                         <input type="text" class="form-control " value="">
                         <button type="submit" class="btn btn-primary">Search</button>
                     </form> --}}
-                <form class="form-inline my-2 my-lg-0" method="POST" action="{{route('admin.user.search')}}">
+                <form class="form-inline my-2 my-lg-0" method="GET" action="{{route('admin.user.search')}}">
                     @csrf
                         <input class="form-control mr-sm-2 mt-4" type="text" placeholder="Search By Username" aria-label="Search" name="search">
                         <button class="btn btn-outline-success my-2 my-sm-0 " type="submit">Search</button>
@@ -54,12 +54,12 @@
                             <td>{{$user->address}}</td>
                         <td>
                             <div class="btn-group btn-group-sm" role="group" aria-label="">
-                                <a href="{{route('admin.user.delete',['id'=>$user->id])}}" class="btn btn-primary text-danger font-weight-bold"><span class="">Delete</span></a>
-                                <a href="{{route('admin.user.edit',['id'=>$user->id])}}" class="btn btn-primary text-primary font-weight-bold"><span class="">Edit user</span></i></a>
+                                <a title="Trash user" href="{{route('admin.user.delete',['id'=>$user->id])}}" class="btn btn-primary text-danger font-weight-bold"><i class="fas fa-trash-alt"></i></a>
+                                <a title="Edit user" href="{{route('admin.user.edit',['id'=>$user->id])}}" class="btn btn-primary text-primary font-weight-bold"> <i class="fas fa-edit"></i></a>
                                 <form action="{{route('admin.userLogin')}}" method="POST">
                                     @csrf
                                    <input type="hidden" name="id" value="{{$user->id}}">
-                                   <button type="submit"  class="btn btn-primary text-success">Login as user</button>
+                                   <button title="Login as user" type="submit"  class="btn btn-primary text-success"><i class="fas fa-sign-in-alt"></i></button>
                                 </form>
                                
                             </div>

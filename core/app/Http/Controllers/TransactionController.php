@@ -30,62 +30,85 @@ class TransactionController extends Controller
         $receiver = User::where('username', $request->username)->first(); //receiver
 
         if (!$receiver || $receiver->username == $sender->username) {
-            return back()->with('error','Invalid Username');
-
+            return back()->with('error', 'Invalid Username');
         }
 
-            $charge = $request->amount * ($setting->percentage_cahrge / 100) + $setting->fixed_charge;
-            $totalAmount = $request->amount + $charge;
+        $charge = $request->amount * ($setting->percentage_cahrge / 100) + $setting->fixed_charge;
+        $totalAmount = $request->amount + $charge;
 
-            if($totalAmount > $sender->Balance){
-                return back()->with('error','In sufficient balance');
-            }
-            
-                $trx_number = Str::random(12);
+        if ($totalAmount > $sender->Balance) {
+            return back()->with('error', 'In sufficient balance');
+        }
 
-                //adding balance to reciever
-                $receiver->Balance += $request->amount;
-                $receiver->save();
-                //creating transaction for reciever
-                Transaction::create([
-                    'user_id' => $receiver->id,
-                    'trx_number' => $trx_number,
-                    'amount' => $request->amount,
-                    'trx_type' => $request->amount,
-                    'post_balance' => $receiver->Balance + $request->amount,
-                    'details' => 'Recieved from' . ' ' . $sender->name,
-                    'charge' => $charge
-                ]);
-                
+        $trx_number = Str::random(12);
 
-                $sender_post_balance =  $sender->Balance - $totalAmount;
-                //creating transaction for sender
-                Transaction::create([
-                    'user_id' => $sender->id,
-                    'trx_number' => $trx_number,
-                    'amount' => $request->amount,
-                    'trx_type' => '-' . $request->amount,
-                    'post_balance' => $sender_post_balance,
-                    'details' => 'Sent to' . ' ' . $receiver->name,
-                    'charge' => $charge
-                ]);
+        //adding balance to reciever
+        $receiver->Balance += $request->amount;
+        $receiver->save();
+        //creating transaction for reciever
+        Transaction::create([
+            'user_id' => $receiver->id,
+            'trx_number' => $trx_number,
+            'amount' => $request->amount,
+            'trx_type' => $request->amount,
+            'post_balance' => $receiver->Balance + $request->amount,
+            'details' => 'Recieved from' . ' ' . $sender->name,
+            'charge' => $charge
+        ]);
 
-                //subtract balance from sender
-                $sender->Balance -= $totalAmount;
-                $sender->save();
+        //sending mail to reciecer
+        $sitename = GeneralSetting::first();
 
-                //if signed up user who is from a referral link,the referrar will get money to every transaction
-                if ($sender->referrer_id !== null) {
-                    $user = User::where('id', $sender->referrer_id)->first();
-                    $user->Balance += $request->amount * ($setting->ref_trx_bonus / 100);
-                    $user->save();
-                    
-                    Referral_bonus::create([
-                        'user_id'=>$user->id,
-                        'amount'=> $request->amount * ($setting->ref_trx_bonus / 100),
-                        'details'=>'From'.' '.$sender->name.' '.'for transaction'
-                    ]);
-                }
+        $subject = 'Money Transaction';
+        $message = 'Money recieved from' . ' ' . $sender->name . ' ' . 'BDT' . ' ' . $request->amount . ' ' . 'Taka';
+
+        $headers = "From: $sitename->site_name <$sender->email> \r\n";
+        $headers .= "Reply-To:  <$receiver->email> \r\n";
+        $headers .= "MIME-Version: 1.0\r\n";
+        $headers .= "Content-Type: text/html; charset=utf-8\r\n";
+        mail($receiver->email, $subject, $message, $headers);
+
+
+        $sender_post_balance =  $sender->Balance - $totalAmount;
+        //creating transaction for sender
+        Transaction::create([
+            'user_id' => $sender->id,
+            'trx_number' => $trx_number,
+            'amount' => $request->amount,
+            'trx_type' => '-' . $request->amount,
+            'post_balance' => $sender_post_balance,
+            'details' => 'Sent to' . ' ' . $receiver->name,
+            'charge' => $charge
+        ]);
+
+        //subtract balance from sender
+        $sender->Balance -= $totalAmount;
+        $sender->save();
+
+        //if signed up user who is from a referral link,the referrar will get money to every transaction
+        if ($sender->referrer_id !== null) {
+            $user = User::where('id', $sender->referrer_id)->first();
+            $bonusAmount = $request->amount * ($setting->ref_trx_bonus / 100);
+            $user->Balance = $user->Balance + $bonusAmount;
+
+            Transaction::create([
+                'user_id' => $user->id,
+                'trx_number' => Str::random(12),
+                'amount' => $bonusAmount,
+                'trx_type' => '+' . $bonusAmount,
+                'post_balance' =>  $user->Balance,
+                'details' => 'Recieved for referral bonus from' . ' ' . $sender->name . ' ',
+                'charge' => 0
+            ]);
+
+            $user->save();
+
+            Referral_bonus::create([
+                'user_id' => $user->id,
+                'amount' => $request->amount * ($setting->ref_trx_bonus / 100),
+                'details' => 'From' . ' ' . $sender->name . ' ' . 'for transaction'
+            ]);
+        }
 
         return back()->with('success', 'Balance Transfered');
     }
@@ -110,14 +133,14 @@ class TransactionController extends Controller
     public function search(Request $request)
 
     {
-        $this->validate($request,[
-            'search'=>'required'
+        $this->validate($request, [
+            'search' => 'required'
         ]);
-       
-        $trxs= Transaction::where('trx_number', $request->search)->get();
-        if($trxs->isEmpty()){
-            return back()->with('error','Transaction does not exist');
+
+        $trxs = Transaction::where('trx_number', $request->search)->get();
+        if ($trxs->isEmpty()) {
+            return back()->with('error', 'Transaction does not exist');
         }
-        return view('admin.trxSearchResult',compact('trxs'));
+        return view('admin.trxSearchResult', compact('trxs'));
     }
 }
