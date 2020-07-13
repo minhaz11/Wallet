@@ -41,7 +41,7 @@ Dashboard - admin
             </div>
             <div class="input-group mb-3">
                 
-                <input id="amount" placeholder="amount" name="amount" type="number" class="form-control validate col-xl-9 col-lg-8 col-md-8 col-sm-7 @error('amount') is-invalid @enderror">
+                <input id="amount" placeholder="amount" name="amount" type="text" class="form-control validate col-xl-9 col-lg-8 col-md-8 col-sm-7 @error('amount') is-invalid @enderror">
                 @error('amount')
                 <span class="invalid-feedback" role="alert">
                     <strong>{{ $message }}</strong>

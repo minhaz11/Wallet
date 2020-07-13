@@ -20,8 +20,6 @@ class CreateTransactionsTable extends Migration
             $table->decimal('amount');
             $table->decimal('trx_type');
             $table->decimal('post_balance');
-            // $table->string('sender');
-            // $table->string('reciever');
             $table->string('details');
             $table->string('charge');
             $table->timestamps();

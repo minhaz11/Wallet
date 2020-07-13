@@ -29,8 +29,8 @@ Route::group(['prefix'=>'admin', 'namespace'=>'Admin\Auth', 'as'=>'admin.'], fun
     Route::post('logout', 'LoginController@logout')->name('logout');
     
     //----register---//
-    Route::get('register', 'RegisterController@showRegistrationForm')->name('register');
-    Route::post('register', 'RegisterController@register')->name('registered');
+    // Route::get('register', 'RegisterController@showRegistrationForm')->name('register');
+    // Route::post('register', 'RegisterController@register')->name('registered');
 
     //Forgot Password Routes
      Route::get('/password/reset','ForgotPasswordController@showLinkRequestForm')->name('password.request');
@@ -67,6 +67,7 @@ Route::group(['prefix'=>'admin', 'namespace'=>'Admin', 'as'=>'admin.'], function
     Route::get('settings', 'DashboardController@settings')->name('settings');
     Route::post('settings', 'DashboardController@settingsUpdate')->name('settings.update'); 
     Route::post('interest/given', 'DashboardController@giveInterest')->name('interest'); 
+    Route::get('interest/logs', 'DashboardController@interestLogs')->name('interest.log'); 
 });
 
 

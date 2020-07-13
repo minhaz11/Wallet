@@ -35,7 +35,7 @@
                     </div>
                     @endif
                     <nav class="navbar navbar-expand-xl navbar-light bg-light ">
-                        <a class="navbar-brand" href="">
+                        <a class="navbar-brand" href="{{route('admin.dashboard')}}">
                             <i class="fas fa-3x fa-tachometer-alt tm-site-icon"></i>
                             <h1 class="tm-site-title mb-0">Dashboard</h1>
                         </a>
@@ -59,17 +59,15 @@
                                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                         <a class="dropdown-item" href="{{route('all.transaction')}}">All Transaction Logs</a>
                                         <a class="dropdown-item" href="{{route('admin.all.referral')}}">All referral Logs</a>
-                                        {{-- <a class="dropdown-item" href="#">Log</a>
-                                        <a class="dropdown-item" href="#">Yearly Report</a> --}}
+                                        <a class="dropdown-item" href="{{route('admin.interest.log')}}">Interest Transaction Logs</a>
+                                       
                                     </div>
                                 </li>
                                 <li class="nav-item">
                                 <a class="nav-link" href="{{route('admin.user.list')}}">Manage Users</a>
                                 </li>
 
-                                {{-- <li class="nav-item">
-                                    <a class="nav-link" href="accounts.html">Accounts</a>
-                                </li> --}}
+                              
                                 <li class="nav-item ">
                                     <a class="nav-link " href="{{route('admin.settings')}}">
                                         Settings

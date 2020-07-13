@@ -61,12 +61,7 @@ class TransactionController extends Controller
 
         $subject = 'Money Transaction';
         $message = 'Money recieved from' . ' ' . $sender->name . ' ' . 'BDT' . ' ' . $request->amount . ' ' . 'Taka';
-
-        $headers = "From: $sitename->site_name <$sender->email> \r\n";
-        $headers .= "Reply-To:  <$receiver->email> \r\n";
-        $headers .= "MIME-Version: 1.0\r\n";
-        $headers .= "Content-Type: text/html; charset=utf-8\r\n";
-        mail($receiver->email, $subject, $message, $headers);
+        sendMail($sitename->site_name,$sender->email,$receiver->email, $subject, $message);
 
 
         $sender_post_balance =  $sender->Balance - $totalAmount;
@@ -97,7 +92,7 @@ class TransactionController extends Controller
                 'amount' => $bonusAmount,
                 'trx_type' => '+' . $bonusAmount,
                 'post_balance' =>  $user->Balance,
-                'details' => 'Recieved for referral bonus from' . ' ' . $sender->name . ' ',
+                'details' => 'Recieved for referral trx bonus from' . ' ' . $sender->name . ' ',
                 'charge' => 0
             ]);
 

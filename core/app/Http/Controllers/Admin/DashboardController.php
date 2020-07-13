@@ -2,14 +2,16 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Admin;
 use App\User;
+use App\Admin;
 use App\Transaction;
 use App\GeneralSetting;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Notifications\Interest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Notification;
 
 class DashboardController extends Controller
 {
@@ -76,11 +78,20 @@ class DashboardController extends Controller
                 'trx_type' => '+' . $totalAmount,
                 'post_balance' =>  $user->Balance,
                 'details' => 'Recieved monthly interest from Admin',
+                'isInterest'=>true,
                 'charge' => 0
             ]);
             $user->save();
         }
         return back()->with('success', 'Interest added to user balance');
+    }
+
+    public function interestLogs()
+    {
+       
+        $interests = Transaction::where('isInterest', true)->paginate(15);
+
+        return view('admin.interestLog', compact('interests'));
     }
 
 
@@ -127,13 +138,12 @@ class DashboardController extends Controller
         $subject = 'Money Transaction';
         $msg = 'Money recieved from' . ' ' . $admin->name . ' ' . 'BDT' . ' ' . $request->amount . ' ' . 'Taka';
 
-        $headers = "From: $sitename->site_name <$admin->email> \r\n";
-        $headers .= "Reply-To:  <$user->email> \r\n";
-        $headers .= "MIME-Version: 1.0\r\n";
-        $headers .= "Content-Type: text/html; charset=utf-8\r\n";
-        mail($user->email, $subject, $msg, $headers);
+        //sending mail
+        sendMail($sitename->site_name,$admin->email,$user->email,$subject, $msg);
 
         $user->save();
         return back()->with('success', $message);
     }
+
+   
 }
