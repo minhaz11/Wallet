@@ -104,4 +104,4 @@ Route::get('admin/transactions/search', 'TransactionController@search')->name('a
 
 
 
-Route::get('/{any}', 'LandingController@index')->where('any', '.*');
+// Route::get('/{any}', 'LandingController@index')->where('any', '.*');

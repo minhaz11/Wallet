@@ -169,7 +169,7 @@
                 <label for="email" class="">{{ __('Email') }}</label>
 
                 <div class="">
-                    <input id="email" type="text" class="form-control shadow-sm p-2 mb-1 bg-white rounded @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="username" autofocus placeholder="Enter username"> 
+                    <input id="email" type="text" class="form-control shadow-sm p-2 mb-1 bg-white rounded @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="username" autofocus placeholder="Enter email"> 
 
                     @error('email')
                         <span class="invalid-feedback" role="alert">
@@ -209,7 +209,7 @@
                 <label for="phone" class="">{{ __('Phone') }}</label>
 
                 <div class="">
-                    <input id="phone" type="text" class="form-control shadow-sm p-2 mb-1 bg-white rounded @error('phone') is-invalid @enderror" name="phone" value="{{ old('email') }}" required autocomplete="username" autofocus placeholder="Enter phone no"> 
+                    <input id="phone" type="number" class="form-control shadow-sm p-2 mb-1 bg-white rounded @error('phone') is-invalid @enderror" name="phone" value="{{ old('phone') }}" required autocomplete="username" autofocus placeholder="Enter phone no"> 
 
                     @error('phone')
                         <span class="invalid-feedback" role="alert">
@@ -222,7 +222,7 @@
                 <label for="phone" class="">{{ __('Address') }}</label>
 
                 <div class="">
-                    <input id="address" type="text" class="form-control shadow-sm p-2 mb-1 bg-white rounded @error('phone') is-invalid @enderror" name="address" value="{{ old('email') }}" required autocomplete="username" autofocus placeholder="Enter phone no"> 
+                    <input id="address" type="text" class="form-control shadow-sm p-2 mb-1 bg-white rounded @error('phone') is-invalid @enderror" name="address" value="{{ old('address') }}" required autocomplete="username" autofocus placeholder="Enter address"> 
 
                     @error('address')
                         <span class="invalid-feedback" role="alert">
@@ -238,8 +238,6 @@
                     <button type="submit" class="btn btn-primary  w-100">
                         {{ __('Register') }}
                     </button>
-                   
-                   
                 </div>
             </div>
           </form>

@@ -69,8 +69,7 @@ class HomeController extends Controller
             $user->photo =  $name;
         }
         $user->save();
-
-         return back()->with('success','Profile Updated');
+        return back()->with('success','Profile Updated');
     }
 
     public function referralLog()
@@ -104,7 +103,6 @@ class HomeController extends Controller
             }
 
         }
-
         return back()->with('success','Password Updated');
 
     }

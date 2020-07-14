@@ -70,10 +70,7 @@ class ManageUserController extends Controller
         if($request->password !== null){
             $user->password=bcrypt($request->password);
         }
-       
         $user->save();
-     
-
         return back()->with('success','User updated');
     }
 
@@ -88,7 +85,6 @@ class ManageUserController extends Controller
         $users = User::where('referrer_id',$id)->with('referrer')->paginate(15);
         return view('admin.userReferralLog',compact('users'));
     }
-
 
     public function userLogin(Request $request)
     {
@@ -110,7 +106,7 @@ class ManageUserController extends Controller
         }
         
     }
-
+    
     public function search(Request $request)
 
     {

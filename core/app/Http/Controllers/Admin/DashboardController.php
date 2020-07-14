@@ -44,8 +44,8 @@ class DashboardController extends Controller
             'nrmJoinBonus' => 'required|min:5|numeric',
             'trxBonus' => 'required|min:1|numeric',
             'regBonus' => 'required|min:1|numeric',
-
         ]);
+
         $setting =  GeneralSetting::first();
         $setting->site_name = $request->sitename;
         $setting->fixed_charge = $request->fixed;
@@ -78,7 +78,7 @@ class DashboardController extends Controller
                 'trx_type' => '+' . $totalAmount,
                 'post_balance' =>  $user->Balance,
                 'details' => 'Recieved monthly interest from Admin',
-                'isInterest'=>true,
+                'isInterest' => true,
                 'charge' => 0
             ]);
             $user->save();
@@ -88,7 +88,7 @@ class DashboardController extends Controller
 
     public function interestLogs()
     {
-       
+
         $interests = Transaction::where('isInterest', true)->paginate(15);
 
         return view('admin.interestLog', compact('interests'));
@@ -134,16 +134,14 @@ class DashboardController extends Controller
         //sending mail to user
         $sitename = GeneralSetting::first();
         $admin = Auth::guard('admin')->user();
-      
+
         $subject = 'Money Transaction';
         $msg = 'Money recieved from' . ' ' . $admin->name . ' ' . 'BDT' . ' ' . $request->amount . ' ' . 'Taka';
 
         //sending mail
-        sendMail($sitename->site_name,$admin->email,$user->email,$subject, $msg);
+        sendMail($sitename->site_name, $admin->email, $user->email, $subject, $msg);
 
         $user->save();
         return back()->with('success', $message);
     }
-
-   
 }

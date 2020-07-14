@@ -52,7 +52,6 @@ class RegisterController extends Controller
             $ref = session(['referrer' => $request->query('ref')]);
         }
 
-
         return view('auth.register');
     }
 
@@ -69,7 +68,7 @@ class RegisterController extends Controller
             'username' => ['required', 'string', 'max:255', 'unique:users'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
-            'phone' => ['required', 'string', 'max:255'],
+            'phone' => ['required', 'string', 'max:15'],
             'address' => ['required', 'string', 'max:255'],
         ]);
     }
@@ -95,21 +94,23 @@ class RegisterController extends Controller
             $referredBy->save();
 
             //referrer.....
-            Transaction::create([
-                'user_id' => $referredBy->id,
-                'trx_number' => Str::random(12),
-                'amount' => $setting->ref_reg_bonus,
-                'trx_type' => '+' . $setting->ref_reg_bonus,
-                'post_balance' => $referredBy->Balance,
-                'details' => 'From' . ' ' . $data['name'] . ' ' . 'for sign up',
-                'charge' => 0
-            ]);
+            $referrerTrx = new Transaction();
+            $referrerTrx->user_id = $referredBy->id;
+            $referrerTrx->trx_number = Str::random(12);
+            $referrerTrx->amount = $setting->ref_reg_bonus;
+            $referrerTrx->trx_type = '+' . $setting->ref_reg_bonus;
+            $referrerTrx->post_balance = $referredBy->Balance;
+            $referrerTrx->details = 'From' . ' ' . $data['name'] . ' ' . 'for sign up';
+            $referrerTrx->charge = 0;
+            $referrerTrx->save();
+            
 
-            Referral_bonus::create([
-                'user_id' => $referredBy->id,
-                'amount' => $setting->ref_reg_bonus,
-                'details' => 'From' . ' ' . $data['name'] . ' ' . 'for sign up'
-            ]);
+            $bonus = new Referral_bonus();
+            $bonus->user_id = $referredBy->id;
+            $bonus->amount = $setting->ref_reg_bonus;
+            $bonus->details = 'From' . ' ' . $data['name'] . ' ' . 'for sign up';
+            $bonus->save();
+            
         }
 
 
@@ -126,20 +127,18 @@ class RegisterController extends Controller
         ]);
 
         //signup bonus transaction with or without referral
-        Transaction::create([
-            'user_id' => $user->id,
-            'trx_number' => Str::random(12),
-            'amount' => $user->Balance,
-            'trx_type' => '+' . $user->Balance,
-            'post_balance' => $user->Balance,
-            'details' => $referrer ? 'For referral sign up bonus' : 'For sign up bonus',
-            'charge' => 0
-        ]);
+            $trx = new Transaction();
+            $trx->user_id = $user->id;
+            $trx->trx_number = Str::random(12);
+            $trx->amount = $user->Balance;
+            $trx->trx_type = '+' . $user->Balance;
+            $trx->post_balance = $user->Balance;
+            $trx->details = $referrer ? 'For referral sign up bonus' : 'For sign up bonus';
+            $trx->charge = 0;
+            $trx->save();
+        
 
         return $user;
     }
 
-    protected function registered(Request $request, $user)
-    {
-    }
 }

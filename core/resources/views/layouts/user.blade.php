@@ -1,25 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>@yield('title')</title>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-    crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
-    integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
-    crossorigin="anonymous"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
-    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
-    crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
   <script src="https://use.fontawesome.com/523c3912de.js"></script>
 </head>
-
 <body>
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <a class="navbar-brand font-weight-bold" href="{{route('home')}}">User Dashboard</a>
@@ -56,32 +47,31 @@
             <form action="{{route('logout')}}" method="POST">
               @csrf
               <button class="dropdown-item border">logout</button>
-
             </form>
-
-
           </div>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="#">Balance : {{ number_format(Auth::user()->Balance, 2) }} BDT</a>
         </li>
-
-
       </ul>
-
     </div>
   </nav>
   <div class="container-fluid">
     <div class="row">
       <div class="col-md-3 border rounded mt-3 shadow p-3 mb-5 bg-white rounded">
-        <img class=" ml-5 mt-2 w-75 h-30 img-thumbnail" src="{{asset('assets/img')}}/{{Auth::user()->photo}}" alt="Card image cap">
+        @if(Auth::user()->photo)
+        <img class=" ml-5 mt-2 w-75 h-30 img-thumbnail" src="{{asset('assets/img')}}/{{Auth::user()->photo}}"
+          alt="Card image cap">
+        @else
+        <img class=" ml-5 mt-2 w-75 h-30 img-thumbnail" src="{{asset('assets/user/img/user.png')}}"
+          alt="Card image cap">
+        @endif
         <li class="list-group-item mt-2 text-center shadow p-3 mb-5 bg-white rounded ">
           <strong>{{Auth::user()->name}}</strong></li>
         @if(Auth::user()->referrer)
         <span class="list-group-item text-muted  text-center"><strong>Referenced by :
             {{Auth::user()->referrer->username}}</strong></span>
         @endif
-
 
         <ul class="list-group mt-3 mb-5 font-weight-bold">
           <p class="text-center text-info">Your Referral Link</p>
@@ -90,7 +80,6 @@
           <a href="{{route('user.trx.logs')}}" class="btn btn-info text-uppercase font-weight-bold mb-3">
             Transaction log
           </a>
-
 
           {{-- <button type="button" class="btn btn-primary text-uppercase font-weight-bold mb-3" data-toggle="modal" data-target="#exampleModal">
                     Add Balance
@@ -101,7 +90,6 @@
           </button>
 
           {{-- <a href="#" class="btn btn-success text-uppercase font-weight-bold mb-1">Send Money</a> --}}
-
           <a href="{{route('user.referral.log')}}" class="btn btn-warning text-uppercase font-weight-bold mb-3">Referral
             log</a>
           <a href="{{route('user.referral.bonuses')}}"
@@ -109,8 +97,6 @@
 
           <a href="{{route('user.referral.form')}}" class="btn btn-secondary text-uppercase font-weight-bold mb-3">Refer
             a Friend</a>
-
-
         </ul>
       </div>
       <!--modal-->
@@ -132,11 +118,6 @@
             </div>
             <div class="modal-body">
               <form>
-                {{-- <div class="form-group">
-                  <label for="exampleInputEmail1">Username</label>
-                  <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="username" name="username">
-                 
-                </div> --}}
                 <div class="form-group">
                   <label for="exampleInputPassword1">Amount</label>
                   <input type="text" class="form-control" name="amount" id="exampleInputPassword1" placeholder="BDT">
@@ -179,7 +160,7 @@
                 </div>
                 <div class="form-group">
                   <label for="exampleInputPassword1">Amount</label>
-                  <input type="number" class="form-control @error('amount') is-invalid @enderror" name="amount"
+                  <input type="text" class="form-control @error('amount') is-invalid @enderror" name="amount"
                     id="exampleInputPassword1" placeholder="BDT">
                   @error('amount ')
                   <span class="invalid-feedback" role="alert">
@@ -187,19 +168,13 @@
                   </span>
                   @enderror
                 </div>
-
                 <button type="submit" class="btn btn-primary">Send</button>
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
               </form>
             </div>
-            {{-- <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Save changes</button>
-        </div> --}}
           </div>
         </div>
       </div>
-
       <div class="col-md-9">
         @yield('content')
         @include('alert.error')
@@ -208,8 +183,5 @@
       </div>
     </div>
   </div>
-
-
 </body>
-
 </html>

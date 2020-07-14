@@ -41,10 +41,6 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    // public function profile()
-    // {
-    //     return $this->hasOne(User_info::class, 'user_id');
-    // }
     public function transactions()
     {
         return $this->hasMany(Transaction::class);
@@ -65,11 +61,9 @@ class User extends Authenticatable
         return $this->hasMany(User::class, 'referrer_id', 'id');
     }
 
-   
-   
-    protected $appends = ['referral_link'];
 
-   
+    protected $appends = ['referral_link'];
+  
     public function getReferralLinkAttribute()
     {
         return $this->referral_link = route('register', ['ref' => $this->username]);
